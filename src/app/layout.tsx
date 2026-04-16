@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://myduty-connector.vercel.app";
+const siteUrl = "https://my-duty-connector.vercel.app";
 
 export const metadata: Metadata = {
   title: "MyDuty Connector",
