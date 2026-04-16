@@ -100,8 +100,8 @@ function buildNaverIcalString(event: NaverCalendarEvent): string {
     lines.push(`DTSTART;VALUE=DATE:${toIcalDate(event.startDate)}`);
     lines.push(`DTEND;VALUE=DATE:${toIcalDate(event.endDate)}`);
   } else {
-    lines.push(`DTSTART:${toIcalDateTime(event.startDate)}`);
-    lines.push(`DTEND:${toIcalDateTime(event.endDate)}`);
+    lines.push(`DTSTART;TZID=Asia/Seoul:${toIcalDateTime(event.startDate)}`);
+    lines.push(`DTEND;TZID=Asia/Seoul:${toIcalDateTime(event.endDate)}`);
   }
 
   lines.push("END:VEVENT");
