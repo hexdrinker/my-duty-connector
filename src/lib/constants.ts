@@ -5,9 +5,9 @@ export const MYDUTY_BASE_URL = "https://myduty.io";
 
 export const MYDUTY_SCHEDULE_API = `${MYDUTY_BASE_URL}/proxy/getUserDutySchedules`;
 
-export const ICS_PRODUCT_ID = "-//MyDuty Bridge//myduty-bridge//KO";
+export const ICS_PRODUCT_ID = "-//MyDuty Connector//myduty-connector//KO";
 
-export const ICS_UID_DOMAIN = "myduty-bridge";
+export const ICS_UID_DOMAIN = "myduty-connector";
 
 export const ERROR_MESSAGES = {
   INVALID_URL: "올바른 마이듀티 공유 링크를 입력해주세요",
