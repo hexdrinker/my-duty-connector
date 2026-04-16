@@ -78,6 +78,9 @@ export const translations = {
       authenticating: "로그인 중...",
       syncing: "일정을 등록하는 중...",
       successMessage: "{success}개 일정이 등록되었습니다. (실패: {failed}개)",
+      modalSuccessTitle: "캘린더 등록 완료",
+      modalErrorTitle: "등록 실패",
+      confirm: "확인",
       dismiss: "닫기",
     },
 
@@ -187,6 +190,9 @@ export const translations = {
       authenticating: "Signing in...",
       syncing: "Adding events...",
       successMessage: "{success} events added. (Failed: {failed})",
+      modalSuccessTitle: "Calendar sync complete",
+      modalErrorTitle: "Sync failed",
+      confirm: "OK",
       dismiss: "Dismiss",
     },
 
