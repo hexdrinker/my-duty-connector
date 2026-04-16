@@ -1,13 +1,15 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { exchangeGoogleCode } from "@/lib/auth/google";
 
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
+  const mode = request.nextUrl.searchParams.get("state") || "popup";
 
   if (!code) {
-    return new Response(callbackHtml("error", "인증 코드를 받지 못했습니다"), {
-      headers: { "Content-Type": "text/html; charset=utf-8" },
-    });
+    if (mode === "redirect") {
+      return redirectWithError("인증 코드를 받지 못했습니다");
+    }
+    return popupResponse("error", "인증 코드를 받지 못했습니다");
   }
 
   try {
@@ -15,18 +17,34 @@ export async function GET(request: NextRequest) {
     const callbackUrl = `${baseUrl}/api/auth/google/callback`;
     const accessToken = await exchangeGoogleCode(code, callbackUrl);
 
-    return new Response(callbackHtml("success", accessToken), {
-      headers: { "Content-Type": "text/html; charset=utf-8" },
-    });
+    if (mode === "redirect") {
+      const redirectUrl = new URL(baseUrl);
+      redirectUrl.searchParams.set("oauth_provider", "google");
+      redirectUrl.searchParams.set("oauth_status", "success");
+      redirectUrl.searchParams.set("oauth_token", accessToken);
+      return NextResponse.redirect(redirectUrl.toString());
+    }
+
+    return popupResponse("success", accessToken);
   } catch {
-    return new Response(callbackHtml("error", "Google 인증에 실패했습니다"), {
-      headers: { "Content-Type": "text/html; charset=utf-8" },
-    });
+    if (mode === "redirect") {
+      return redirectWithError("Google 인증에 실패했습니다");
+    }
+    return popupResponse("error", "Google 인증에 실패했습니다");
   }
 }
 
-function callbackHtml(status: string, data: string): string {
-  return `<!DOCTYPE html>
+function redirectWithError(message: string) {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const redirectUrl = new URL(baseUrl);
+  redirectUrl.searchParams.set("oauth_provider", "google");
+  redirectUrl.searchParams.set("oauth_status", "error");
+  return NextResponse.redirect(redirectUrl.toString());
+}
+
+function popupResponse(status: string, data: string) {
+  return new Response(
+    `<!DOCTYPE html>
 <html><head><title>MyDuty Connector</title></head>
 <body><p>처리 중...</p>
 <script>
@@ -36,5 +54,7 @@ function callbackHtml(status: string, data: string): string {
   );
   window.close();
 </script>
-</body></html>`;
+</body></html>`,
+    { headers: { "Content-Type": "text/html; charset=utf-8" } },
+  );
 }

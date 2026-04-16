@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { exchangeNaverCode } from "@/lib/auth/naver";
 
 export async function GET(request: NextRequest) {
@@ -6,16 +6,21 @@ export async function GET(request: NextRequest) {
   const state = request.nextUrl.searchParams.get("state");
   const savedState = request.cookies.get("naver_oauth_state")?.value;
 
+  // state format: "{mode}:{uuid}"
+  const mode = state?.split(":")[0] || "popup";
+
   if (!code || !state) {
-    return new Response(callbackHtml("error", "인증 코드를 받지 못했습니다"), {
-      headers: { "Content-Type": "text/html; charset=utf-8" },
-    });
+    if (mode === "redirect") {
+      return redirectWithError();
+    }
+    return popupResponse("error", "인증 코드를 받지 못했습니다");
   }
 
   if (state !== savedState) {
-    return new Response(callbackHtml("error", "인증 상태가 일치하지 않습니다"), {
-      headers: { "Content-Type": "text/html; charset=utf-8" },
-    });
+    if (mode === "redirect") {
+      return redirectWithError();
+    }
+    return popupResponse("error", "인증 상태가 일치하지 않습니다");
   }
 
   try {
@@ -23,20 +28,34 @@ export async function GET(request: NextRequest) {
     const callbackUrl = `${baseUrl}/api/auth/naver/callback`;
     const accessToken = await exchangeNaverCode(code, callbackUrl, state);
 
-    const response = new Response(callbackHtml("success", accessToken), {
-      headers: { "Content-Type": "text/html; charset=utf-8" },
-    });
+    if (mode === "redirect") {
+      const redirectUrl = new URL(baseUrl);
+      redirectUrl.searchParams.set("oauth_provider", "naver");
+      redirectUrl.searchParams.set("oauth_status", "success");
+      redirectUrl.searchParams.set("oauth_token", accessToken);
+      return NextResponse.redirect(redirectUrl.toString());
+    }
 
-    return response;
+    return popupResponse("success", accessToken);
   } catch {
-    return new Response(callbackHtml("error", "Naver 인증에 실패했습니다"), {
-      headers: { "Content-Type": "text/html; charset=utf-8" },
-    });
+    if (mode === "redirect") {
+      return redirectWithError();
+    }
+    return popupResponse("error", "Naver 인증에 실패했습니다");
   }
 }
 
-function callbackHtml(status: string, data: string): string {
-  return `<!DOCTYPE html>
+function redirectWithError() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const redirectUrl = new URL(baseUrl);
+  redirectUrl.searchParams.set("oauth_provider", "naver");
+  redirectUrl.searchParams.set("oauth_status", "error");
+  return NextResponse.redirect(redirectUrl.toString());
+}
+
+function popupResponse(status: string, data: string) {
+  return new Response(
+    `<!DOCTYPE html>
 <html><head><title>MyDuty Connector</title></head>
 <body><p>처리 중...</p>
 <script>
@@ -46,5 +65,7 @@ function callbackHtml(status: string, data: string): string {
   );
   window.close();
 </script>
-</body></html>`;
+</body></html>`,
+    { headers: { "Content-Type": "text/html; charset=utf-8" } },
+  );
 }

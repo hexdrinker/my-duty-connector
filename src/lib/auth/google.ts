@@ -1,7 +1,7 @@
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token";
 
-export function getGoogleAuthUrl(callbackUrl: string): string {
+export function getGoogleAuthUrl(callbackUrl: string, mode: string = "popup"): string {
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_CLIENT_ID!,
     redirect_uri: callbackUrl,
@@ -9,6 +9,7 @@ export function getGoogleAuthUrl(callbackUrl: string): string {
     scope: "https://www.googleapis.com/auth/calendar.events",
     access_type: "online",
     prompt: "consent",
+    state: mode,
   });
 
   return `${GOOGLE_AUTH_URL}?${params.toString()}`;
