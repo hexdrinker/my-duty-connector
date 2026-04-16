@@ -98,6 +98,8 @@ export const translations = {
     footer: {
       description:
         "MyDuty Connector — 마이듀티 공유 링크를 캘린더 파일로 변환합니다",
+      terms: "이용약관",
+      privacy: "개인정보처리방침",
     },
 
     // Theme
@@ -199,6 +201,8 @@ export const translations = {
     footer: {
       description:
         "MyDuty Connector — Convert MyDuty share links into calendar files",
+      terms: "Terms of Service",
+      privacy: "Privacy Policy",
     },
 
     theme: {

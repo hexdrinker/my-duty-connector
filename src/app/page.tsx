@@ -215,6 +215,21 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t py-8 text-center text-xs text-muted-foreground">
         <p>{t.footer.description}</p>
+        <p className="mt-1 flex items-center justify-center gap-3">
+          <a
+            href="/terms"
+            className="underline underline-offset-2 transition-colors hover:text-foreground"
+          >
+            {t.footer.terms}
+          </a>
+          <span>|</span>
+          <a
+            href="/privacy"
+            className="underline underline-offset-2 transition-colors hover:text-foreground"
+          >
+            {t.footer.privacy}
+          </a>
+        </p>
         <p className="mt-2">
           &copy; {new Date().getFullYear()}{" "}
           <a
