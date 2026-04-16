@@ -1,20 +1,3 @@
-export function formatDateTimeLocal(date: Date): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  const h = String(date.getHours()).padStart(2, "0");
-  const min = String(date.getMinutes()).padStart(2, "0");
-  const s = String(date.getSeconds()).padStart(2, "0");
-  return `${y}${m}${d}T${h}${min}${s}`;
-}
-
-export function formatDateOnly(date: Date): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
-  return `${y}${m}${d}`;
-}
-
 export function escapeIcsText(text: string): string {
   return text
     .replace(/\\/g, "\\\\")
@@ -40,10 +23,9 @@ export function foldLine(line: string): string {
   let offset = 0;
 
   while (offset < bytes.length) {
-    const limit = offset === 0 ? MAX_OCTETS : MAX_OCTETS - 1; // continuation lines start with space
+    const limit = offset === 0 ? MAX_OCTETS : MAX_OCTETS - 1;
     let end = Math.min(offset + limit, bytes.length);
 
-    // 멀티바이트 문자 중간에서 자르지 않도록 보정
     while (end > offset && isUtf8Continuation(bytes[end])) {
       end--;
     }

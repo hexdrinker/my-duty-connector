@@ -68,7 +68,20 @@ export const translations = {
       endTime: "종료 시간",
     },
 
-    // Download
+    // Export
+    export: {
+      title: "캘린더에 등록하기",
+      description: "원하는 방식으로 근무표를 캘린더에 추가하세요",
+      icsDownload: ".ics 파일 다운로드",
+      googleCalendar: "Google Calendar에 추가",
+      naverCalendar: "Naver Calendar에 추가",
+      authenticating: "로그인 중...",
+      syncing: "일정을 등록하는 중...",
+      successMessage: "{success}개 일정이 등록되었습니다. (실패: {failed}개)",
+      dismiss: "닫기",
+    },
+
+    // Download (legacy)
     download: {
       button: ".ics 파일 다운로드 ({count}개 일정)",
     },
@@ -163,6 +176,18 @@ export const translations = {
       allDay: "All-day event",
       startTime: "Start time",
       endTime: "End time",
+    },
+
+    export: {
+      title: "Add to calendar",
+      description: "Choose how to add the schedule to your calendar",
+      icsDownload: "Download .ics file",
+      googleCalendar: "Add to Google Calendar",
+      naverCalendar: "Add to Naver Calendar",
+      authenticating: "Signing in...",
+      syncing: "Adding events...",
+      successMessage: "{success} events added. (Failed: {failed})",
+      dismiss: "Dismiss",
     },
 
     download: {

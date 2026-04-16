@@ -77,8 +77,8 @@ export interface DutyRule {
 export interface CalendarEvent {
   uid: string;
   title: string;
-  start: Date;
-  end: Date;
+  start: string; // ISO string for serialization
+  end: string;
   allDay: boolean;
   description?: string;
 }

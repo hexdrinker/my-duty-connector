@@ -3,8 +3,6 @@ import { ICS_PRODUCT_ID } from "../constants";
 import {
   escapeIcsText,
   foldLine,
-  formatDateOnly,
-  formatDateTimeLocal,
   generateUid,
 } from "./utils";
 
@@ -27,8 +25,8 @@ export function buildCalendarEvents(
         return {
           uid: generateUid(entry.date, entry.dutyCode),
           title: rule.displayName,
-          start,
-          end,
+          start: start.toISOString(),
+          end: end.toISOString(),
           allDay: true,
         };
       }
@@ -47,12 +45,31 @@ export function buildCalendarEvents(
       return {
         uid: generateUid(entry.date, entry.dutyCode),
         title: rule.displayName,
-        start,
-        end,
+        start: start.toISOString(),
+        end: end.toISOString(),
         allDay: false,
       };
     })
     .filter((event): event is CalendarEvent => event !== null);
+}
+
+function formatDateTimeLocal(isoString: string): string {
+  const d = new Date(isoString);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const h = String(d.getHours()).padStart(2, "0");
+  const min = String(d.getMinutes()).padStart(2, "0");
+  const s = String(d.getSeconds()).padStart(2, "0");
+  return `${y}${m}${day}T${h}${min}${s}`;
+}
+
+function formatDateOnly(isoString: string): string {
+  const d = new Date(isoString);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}${m}${day}`;
 }
 
 export function generateIcsString(events: CalendarEvent[]): string {

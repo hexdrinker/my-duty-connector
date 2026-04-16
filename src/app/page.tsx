@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { LinkInput } from "@/components/LinkInput";
 import { DutyPreview } from "@/components/DutyPreview";
 import { DutyRuleSettings } from "@/components/DutyRuleSettings";
-import { DownloadButton } from "@/components/DownloadButton";
+import { ExportSection } from "@/components/ExportSection";
 import { ErrorDisplay } from "@/components/ErrorDisplay";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LocaleToggle } from "@/components/LocaleToggle";
@@ -198,7 +198,7 @@ export default function Home() {
                 </div>
 
                 <div className="animate-fade-in-up-delay-2">
-                  <DownloadButton
+                  <ExportSection
                     entries={result.entries}
                     rules={rules}
                     year={result.year}

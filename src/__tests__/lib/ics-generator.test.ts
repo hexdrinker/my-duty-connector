@@ -45,8 +45,8 @@ describe("buildCalendarEvents", () => {
 
     expect(events).toHaveLength(1);
     expect(events[0].title).toBe("D");
-    expect(events[0].start.getHours()).toBe(7);
-    expect(events[0].end.getHours()).toBe(15);
+    expect(new Date(events[0].start).getHours()).toBe(7);
+    expect(new Date(events[0].end).getHours()).toBe(15);
     expect(events[0].allDay).toBe(false);
   });
 
@@ -58,10 +58,10 @@ describe("buildCalendarEvents", () => {
     const events = buildCalendarEvents(entries, rules);
 
     expect(events).toHaveLength(1);
-    expect(events[0].start.getDate()).toBe(1);
-    expect(events[0].start.getHours()).toBe(23);
-    expect(events[0].end.getDate()).toBe(2); // next day
-    expect(events[0].end.getHours()).toBe(7);
+    expect(new Date(events[0].start).getDate()).toBe(1);
+    expect(new Date(events[0].start).getHours()).toBe(23);
+    expect(new Date(events[0].end).getDate()).toBe(2); // next day
+    expect(new Date(events[0].end).getHours()).toBe(7);
   });
 
   it("creates all-day events", () => {
