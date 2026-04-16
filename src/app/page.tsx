@@ -33,7 +33,8 @@ export default function Home() {
       {/* Nav bar */}
       <nav className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-2">
-          <span className="text-sm font-bold tracking-tight">
+          <span className="flex items-center gap-2 text-sm font-bold tracking-tight">
+            <img src="/favicon.svg" alt="" className="h-5 w-5" />
             MyDuty{" "}
             <span className="text-primary">Connector</span>
           </span>

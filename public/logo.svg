@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Background: rounded square -->
+  <rect width="512" height="512" rx="112" fill="#6C5CE7"/>
+
+  <!-- Calendar body -->
+  <rect x="96" y="144" width="320" height="272" rx="32" fill="white" opacity="0.95"/>
+
+  <!-- Calendar top bar -->
+  <rect x="96" y="144" width="320" height="72" rx="32" fill="white"/>
+  <rect x="96" y="180" width="320" height="36" fill="white"/>
+
+  <!-- Calendar rings -->
+  <rect x="176" y="112" width="24" height="64" rx="12" fill="white"/>
+  <rect x="312" y="112" width="24" height="64" rx="12" fill="white"/>
+
+  <!-- Medical cross (nurse symbol) -->
+  <rect x="224" y="260" width="64" height="24" rx="6" fill="#6C5CE7"/>
+  <rect x="244" y="240" width="24" height="64" rx="6" fill="#6C5CE7"/>
+
+  <!-- Connection dots and line -->
+  <circle cx="168" cy="360" r="16" fill="#6C5CE7" opacity="0.6"/>
+  <circle cx="344" cy="360" r="16" fill="#6C5CE7" opacity="0.6"/>
+  <rect x="184" y="354" width="144" height="12" rx="6" fill="#6C5CE7" opacity="0.35"/>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background -->
+  <rect width="32" height="32" rx="7" fill="#6C5CE7"/>
+
+  <!-- Calendar body -->
+  <rect x="6" y="9" width="20" height="17" rx="3" fill="white" opacity="0.95"/>
+
+  <!-- Calendar top -->
+  <rect x="6" y="9" width="20" height="5" rx="3" fill="white"/>
+  <rect x="6" y="12" width="20" height="2" fill="white"/>
+
+  <!-- Calendar rings -->
+  <rect x="11" y="7" width="2" height="4" rx="1" fill="white"/>
+  <rect x="19" y="7" width="2" height="4" rx="1" fill="white"/>
+
+  <!-- Medical cross -->
+  <rect x="13" y="17.5" width="6" height="2" rx="1" fill="#6C5CE7"/>
+  <rect x="14.5" y="16" width="3" height="5" rx="1" fill="#6C5CE7"/>
+</svg>
