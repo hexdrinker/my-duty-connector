@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import type { DutyRule, MyDutyUnit } from "@/lib/types";
 
-const STORAGE_KEY = "myduty-bridge-rules";
+const STORAGE_KEY = "myduty-connector-rules";
 
 function unitToRule(unit: MyDutyUnit): DutyRule {
   const startTime = unit.startTime
