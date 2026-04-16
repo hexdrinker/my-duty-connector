@@ -35,13 +35,25 @@ export function buildCalendarEvents(
       const [startH, startM] = rule.startTime.split(":").map(Number);
       const [endH, endM] = rule.endTime.split(":").map(Number);
 
+      // 야간근무(자정 넘김): 종일 일정으로 변환, 제목에 시간 포함
+      const crossesMidnight =
+        endH < startH || (endH === startH && endM < startM);
+
+      if (crossesMidnight) {
+        const start = new Date(year, month - 1, day);
+        const end = new Date(year, month - 1, day + 1);
+        return {
+          uid: generateUid(entry.date, entry.dutyCode),
+          title: `${rule.displayName} ${rule.startTime}~${rule.endTime}`,
+          start: start.toISOString(),
+          end: end.toISOString(),
+          allDay: true,
+          color: entry.color,
+        };
+      }
+
       const start = new Date(year, month - 1, day, startH, startM);
       const end = new Date(year, month - 1, day, endH, endM);
-
-      // 야간근무: 종료시간이 시작시간보다 이르면 다음 날
-      if (endH < startH || (endH === startH && endM < startM)) {
-        end.setDate(end.getDate() + 1);
-      }
 
       return {
         uid: generateUid(entry.date, entry.dutyCode),

@@ -50,7 +50,7 @@ describe("buildCalendarEvents", () => {
     expect(events[0].allDay).toBe(false);
   });
 
-  it("handles night shift crossing midnight", () => {
+  it("handles night shift crossing midnight as all-day event", () => {
     const entries = [
       makeEntry("2026-04-01", "N", { startTime: "23:00", endTime: "07:00" }),
     ];
@@ -58,10 +58,9 @@ describe("buildCalendarEvents", () => {
     const events = buildCalendarEvents(entries, rules);
 
     expect(events).toHaveLength(1);
+    expect(events[0].allDay).toBe(true);
+    expect(events[0].title).toBe("N 23:00~07:00");
     expect(new Date(events[0].start).getDate()).toBe(1);
-    expect(new Date(events[0].start).getHours()).toBe(23);
-    expect(new Date(events[0].end).getDate()).toBe(2); // next day
-    expect(new Date(events[0].end).getHours()).toBe(7);
   });
 
   it("creates all-day events", () => {
