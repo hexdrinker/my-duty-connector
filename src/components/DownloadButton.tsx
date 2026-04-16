@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import type { DutyEntry, DutyRule } from "@/lib/types";
 import { entriesToIcs } from "@/lib/ics/generator";
+import { trackIcsDownloaded } from "@/lib/analytics";
 import { useI18n } from "@/lib/i18n/context";
 
 interface DownloadButtonProps {
@@ -22,6 +23,12 @@ export function DownloadButton({
   const { t } = useI18n();
 
   const handleDownload = useCallback(() => {
+    const activeCount = entries.filter((e) => {
+      const r = rules.find((rule) => rule.code === e.dutyCode);
+      return r && !r.skip;
+    }).length;
+    trackIcsDownloaded(activeCount, year, month);
+
     const icsContent = entriesToIcs(entries, rules);
     const blob = new Blob([icsContent], {
       type: "text/calendar;charset=utf-8",

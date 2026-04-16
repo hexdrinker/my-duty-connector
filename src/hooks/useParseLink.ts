@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import type { ParseResult } from "@/lib/types";
+import { trackLinkSubmitted, trackParseSuccess, trackParseFailed } from "@/lib/analytics";
 
 interface UseParseLink {
   result: ParseResult | null;
@@ -23,6 +24,8 @@ export function useParseLink(): UseParseLink {
       setResult(null);
 
       try {
+        trackLinkSubmitted(url);
+
         const response = await fetch("/api/parse", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -32,11 +35,14 @@ export function useParseLink(): UseParseLink {
         const data = await response.json();
 
         if (!response.ok) {
+          trackParseFailed(data.code || "UNKNOWN");
           setError(data.error || "알 수 없는 오류가 발생했습니다");
           return;
         }
 
-        setResult(data as ParseResult);
+        const parsed = data as ParseResult;
+        trackParseSuccess(parsed.userName, parsed.entries.length, parsed.year, parsed.month);
+        setResult(parsed);
       } catch {
         setError("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
       } finally {
