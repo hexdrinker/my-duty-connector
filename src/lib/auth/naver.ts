@@ -121,7 +121,6 @@ function toIcalDate(isoString: string): string {
 /** ISO string (UTC) → iCal datetime (KST, UTC+9) */
 function toIcalDateTime(isoString: string): string {
   const d = new Date(isoString);
-  // UTC → KST 변환 (Vercel 서버는 UTC이므로 +9시간)
   const kst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
   const y = kst.getUTCFullYear();
   const m = String(kst.getUTCMonth() + 1).padStart(2, "0");
