@@ -57,26 +57,17 @@ export async function insertNaverCalendarEvents(
   let failed = 0;
 
   for (const event of events) {
-    const calendarType = event.allDay ? "allday" : "schedule";
-    const body = new URLSearchParams({
-      calendarId: "defaultCalendarId",
-      scheduleIcalString: buildNaverIcalString(event),
-    });
-
-    const response = await fetch(
-      `${NAVER_CALENDAR_API}?calendarId=defaultCalendarId`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          calendarId: "defaultCalendarId",
-          scheduleIcalString: buildNaverIcalString(event),
-        }),
+    const response = await fetch(NAVER_CALENDAR_API, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-    );
+      body: new URLSearchParams({
+        calendarId: "defaultCalendarId",
+        scheduleIcalString: buildNaverIcalString(event),
+      }),
+    });
 
     if (response.ok) {
       const data = await response.json();
@@ -104,19 +95,39 @@ function buildNaverIcalString(event: NaverCalendarEvent): string {
   ];
 
   if (event.allDay) {
-    const dateOnly = event.startDate.split("T")[0].replace(/-/g, "");
-    const endParts = event.endDate.split("T")[0].replace(/-/g, "");
-    lines.push(`DTSTART;VALUE=DATE:${dateOnly}`);
-    lines.push(`DTEND;VALUE=DATE:${endParts}`);
+    lines.push(`DTSTART;VALUE=DATE:${toIcalDate(event.startDate)}`);
+    lines.push(`DTEND;VALUE=DATE:${toIcalDate(event.endDate)}`);
   } else {
-    const start = event.startDate.replace(/-/g, "").replace(/:/g, "");
-    const end = event.endDate.replace(/-/g, "").replace(/:/g, "");
-    lines.push(`DTSTART:${start}`);
-    lines.push(`DTEND:${end}`);
+    lines.push(`DTSTART:${toIcalDateTime(event.startDate)}`);
+    lines.push(`DTEND:${toIcalDateTime(event.endDate)}`);
   }
 
   lines.push("END:VEVENT");
   lines.push("END:VCALENDAR");
 
   return lines.join("\r\n");
+}
+
+/** ISO string (UTC) → iCal date (KST, UTC+9) */
+function toIcalDate(isoString: string): string {
+  const d = new Date(isoString);
+  const kst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
+  const y = kst.getUTCFullYear();
+  const m = String(kst.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(kst.getUTCDate()).padStart(2, "0");
+  return `${y}${m}${day}`;
+}
+
+/** ISO string (UTC) → iCal datetime (KST, UTC+9) */
+function toIcalDateTime(isoString: string): string {
+  const d = new Date(isoString);
+  // UTC → KST 변환 (Vercel 서버는 UTC이므로 +9시간)
+  const kst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
+  const y = kst.getUTCFullYear();
+  const m = String(kst.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(kst.getUTCDate()).padStart(2, "0");
+  const h = String(kst.getUTCHours()).padStart(2, "0");
+  const min = String(kst.getUTCMinutes()).padStart(2, "0");
+  const s = String(kst.getUTCSeconds()).padStart(2, "0");
+  return `${y}${m}${day}T${h}${min}${s}`;
 }
