@@ -52,11 +52,13 @@ interface NaverCalendarEvent {
 export async function insertNaverCalendarEvents(
   accessToken: string,
   events: NaverCalendarEvent[],
-): Promise<{ success: number; failed: number }> {
+): Promise<{ success: number; failed: number; firstError?: string }> {
   let success = 0;
   let failed = 0;
+  let firstError: string | undefined;
 
   for (const event of events) {
+    const icalString = buildNaverIcalString(event);
     const response = await fetch(NAVER_CALENDAR_API, {
       method: "POST",
       headers: {
@@ -69,19 +71,19 @@ export async function insertNaverCalendarEvents(
       }),
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      if (data.result === "success" || data.returnValue) {
-        success++;
-      } else {
-        failed++;
-      }
+    const data = await response.json();
+
+    if (response.ok && (data.result === "success" || data.returnValue)) {
+      success++;
     } else {
+      if (!firstError) {
+        firstError = JSON.stringify({ status: response.status, body: data, ical: icalString });
+      }
       failed++;
     }
   }
 
-  return { success, failed };
+  return { success, failed, firstError };
 }
 
 function buildNaverIcalString(event: NaverCalendarEvent): string {
