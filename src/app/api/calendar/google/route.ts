@@ -28,8 +28,8 @@ export async function POST(request: NextRequest) {
       }
       return {
         summary: event.title,
-        start: { dateTime: event.start },
-        end: { dateTime: event.end },
+        start: { dateTime: event.start, timeZone: "Asia/Seoul" },
+        end: { dateTime: event.end, timeZone: "Asia/Seoul" },
       };
     });
 

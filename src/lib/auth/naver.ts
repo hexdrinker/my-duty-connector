@@ -109,14 +109,24 @@ function buildNaverIcalString(event: NaverCalendarEvent): string {
     lines.push(`DTSTART;VALUE=DATE:${dateOnly}`);
     lines.push(`DTEND;VALUE=DATE:${endParts}`);
   } else {
-    const start = event.startDate.replace(/-/g, "").replace(/:/g, "");
-    const end = event.endDate.replace(/-/g, "").replace(/:/g, "");
-    lines.push(`DTSTART:${start}`);
-    lines.push(`DTEND:${end}`);
+    lines.push(`DTSTART:${toIcalDateTime(event.startDate)}`);
+    lines.push(`DTEND:${toIcalDateTime(event.endDate)}`);
   }
 
   lines.push("END:VEVENT");
   lines.push("END:VCALENDAR");
 
   return lines.join("\r\n");
+}
+
+/** ISO string → iCal datetime (로컬 시간 기준) */
+function toIcalDateTime(isoString: string): string {
+  const d = new Date(isoString);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const h = String(d.getHours()).padStart(2, "0");
+  const min = String(d.getMinutes()).padStart(2, "0");
+  const s = String(d.getSeconds()).padStart(2, "0");
+  return `${y}${m}${day}T${h}${min}${s}`;
 }
