@@ -28,6 +28,16 @@ function colorDistance(a: [number, number, number], b: [number, number, number])
   return Math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2);
 }
 
+/** ISO string (UTC) → KST 날짜 문자열 (YYYY-MM-DD) */
+function isoToKstDate(isoString: string): string {
+  const d = new Date(isoString);
+  const kst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
+  const y = kst.getUTCFullYear();
+  const m = String(kst.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(kst.getUTCDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 function hexToGoogleColorId(hex: string): string {
   const target = hexToRgb(hex);
   let closest = "1";
@@ -67,8 +77,8 @@ export async function POST(request: NextRequest) {
       if (event.allDay) {
         return {
           summary: event.title,
-          start: { date: event.start.split("T")[0] },
-          end: { date: event.end.split("T")[0] },
+          start: { date: isoToKstDate(event.start) },
+          end: { date: isoToKstDate(event.end) },
           ...(colorId && { colorId }),
         };
       }
