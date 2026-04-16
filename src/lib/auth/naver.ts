@@ -75,6 +75,9 @@ export async function insertNaverCalendarEvents(
 
     if (response.ok && (data.result === "success" || data.returnValue)) {
       success++;
+    } else if (data.code === 409 || data.errorMessage?.includes("ResourceConflict")) {
+      // UID 충돌 = 이미 등록된 일정 → 성공으로 처리
+      success++;
     } else {
       if (!firstError) {
         firstError = JSON.stringify({ status: response.status, body: data, ical: icalString });

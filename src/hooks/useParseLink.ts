@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { ParseResult } from "@/lib/types";
 import { trackLinkSubmitted, trackParseSuccess, trackParseFailed } from "@/lib/analytics";
+
+const STATE_KEY = "myduty-connector-parse-result";
 
 interface UseParseLink {
   result: ParseResult | null;
@@ -16,6 +18,29 @@ export function useParseLink(): UseParseLink {
   const [result, setResult] = useState<ParseResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // OAuth 리다이렉트 후 복원
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(STATE_KEY);
+      if (saved) {
+        setResult(JSON.parse(saved));
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  // result가 바뀔 때마다 sessionStorage에 저장
+  useEffect(() => {
+    if (result) {
+      try {
+        sessionStorage.setItem(STATE_KEY, JSON.stringify(result));
+      } catch {
+        // ignore
+      }
+    }
+  }, [result]);
 
   const parse = useCallback(
     async (url: string, year?: number, month?: number) => {
@@ -56,6 +81,11 @@ export function useParseLink(): UseParseLink {
     setResult(null);
     setError(null);
     setLoading(false);
+    try {
+      sessionStorage.removeItem(STATE_KEY);
+    } catch {
+      // ignore
+    }
   }, []);
 
   return { result, loading, error, parse, reset };
