@@ -94,14 +94,6 @@ export const translations = {
       network: "네트워크 오류가 발생했습니다. 다시 시도해주세요.",
     },
 
-    // Calendar guide
-    guide: {
-      title: "캘린더에 등록하는 방법",
-      google: "설정 > 가져오기 및 내보내기 > 가져오기",
-      apple: ".ics 파일을 더블클릭하거나 파일 > 가져오기",
-      naver: "설정 > 캘린더 가져오기",
-    },
-
     // Footer
     footer: {
       description:
@@ -202,13 +194,6 @@ export const translations = {
 
     error: {
       network: "A network error occurred. Please try again.",
-    },
-
-    guide: {
-      title: "How to import into your calendar",
-      google: "Settings > Import & Export > Import",
-      apple: 'Double-click the .ics file or File > Import',
-      naver: "Settings > Import calendar",
     },
 
     footer: {

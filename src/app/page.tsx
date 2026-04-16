@@ -206,40 +206,6 @@ export default function Home() {
                   />
                 </div>
 
-                <div className="animate-fade-in-up-delay-3 rounded-xl border bg-muted/30 p-5">
-                  <h3 className="mb-3 text-sm font-semibold">
-                    {t.guide.title}
-                  </h3>
-                  <div className="grid gap-2 text-sm text-muted-foreground">
-                    <div className="flex items-start gap-2">
-                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-primary/10 text-[10px] font-bold text-primary">
-                        G
-                      </span>
-                      <span>
-                        <strong className="text-foreground">Google Calendar</strong>{" "}
-                        &mdash; {t.guide.google}
-                      </span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-primary/10 text-[10px] font-bold text-primary">
-                        A
-                      </span>
-                      <span>
-                        <strong className="text-foreground">Apple Calendar</strong>{" "}
-                        &mdash; {t.guide.apple}
-                      </span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-primary/10 text-[10px] font-bold text-primary">
-                        N
-                      </span>
-                      <span>
-                        <strong className="text-foreground">Naver Calendar</strong>{" "}
-                        &mdash; {t.guide.naver}
-                      </span>
-                    </div>
-                  </div>
-                </div>
               </>
             )}
           </div>
