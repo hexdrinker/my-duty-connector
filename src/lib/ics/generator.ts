@@ -62,7 +62,7 @@ export function generateIcsString(events: CalendarEvent[]): string {
     `PRODID:${ICS_PRODUCT_ID}`,
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
-    "X-WR-CALNAME:MyDuty Schedule",
+    "X-WR-CALNAME:MyDuty Connector",
   ];
 
   for (const event of events) {

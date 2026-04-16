@@ -69,5 +69,5 @@ function isUtf8Continuation(byte: number | undefined): boolean {
 }
 
 export function generateUid(date: string, dutyCode: string): string {
-  return `${date}-${dutyCode}@myduty-bridge`;
+  return `${date}-${dutyCode}@myduty-connector`;
 }
