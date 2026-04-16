@@ -28,6 +28,7 @@ export function buildCalendarEvents(
           start: start.toISOString(),
           end: end.toISOString(),
           allDay: true,
+          color: entry.color,
         };
       }
 
@@ -48,9 +49,10 @@ export function buildCalendarEvents(
         start: start.toISOString(),
         end: end.toISOString(),
         allDay: false,
+        color: entry.color,
       };
     })
-    .filter((event): event is CalendarEvent => event !== null);
+    .filter((event) => event !== null) as CalendarEvent[];
 }
 
 function formatDateTimeLocal(isoString: string): string {

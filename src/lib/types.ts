@@ -81,6 +81,7 @@ export interface CalendarEvent {
   end: string;
   allDay: boolean;
   description?: string;
+  color?: string; // hex color from duty unit
 }
 
 export interface FetcherResult {

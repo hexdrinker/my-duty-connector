@@ -24,6 +24,7 @@ export async function POST(request: NextRequest) {
       startDate: event.start,
       endDate: event.end,
       allDay: event.allDay,
+      color: event.color,
     }));
 
     const result = await insertNaverCalendarEvents(accessToken, naverEvents);

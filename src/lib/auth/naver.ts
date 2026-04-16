@@ -44,9 +44,10 @@ export async function exchangeNaverCode(
 interface NaverCalendarEvent {
   uid: string;
   title: string;
-  startDate: string; // "yyyy-MM-dd'T'HH:mm:ss"
+  startDate: string;
   endDate: string;
   allDay: boolean;
+  color?: string;
 }
 
 export async function insertNaverCalendarEvents(
@@ -98,6 +99,11 @@ function buildNaverIcalString(event: NaverCalendarEvent): string {
     `UID:${event.uid}`,
     `SUMMARY:${event.title}`,
   ];
+
+  if (event.color) {
+    lines.push(`COLOR:${event.color}`);
+    lines.push(`X-APPLE-CALENDAR-COLOR:${event.color}`);
+  }
 
   if (event.allDay) {
     lines.push(`DTSTART;VALUE=DATE:${toIcalDate(event.startDate)}`);
