@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"pnpm create next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \\\"@/*\\\" --use-pnpm --turbopack 2>&1\",\"timeout\":120000,\"description\":\"Create Next.js project in...",
+  "error": "Exit code 1\n(node:74298) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.\n(Use `node --trace-deprecation ...` to show where the warning was created)\n.../19d93fd35a0-1223a                    | Progress: resolved 1, reused 0, downloaded 0, added 0\n.../19d93fd35a0-1223a                    |   +1 +\n.../19d93fd35a0-1223a                   ...",
+  "timestamp": "2026-04-16T01:52:19.400Z",
+  "retry_count": 1
+}
