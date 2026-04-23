@@ -2,7 +2,11 @@ import * as cheerio from "cheerio";
 import type { FetcherResult, MyDutyUnit } from "../types";
 import { MYDUTY_BASE_URL } from "../constants";
 
-const USER_ID_PATTERN = /var\s+userId\s*=\s*"(\d+)"/;
+interface BootstrapPayload {
+  userId: string;
+  userName: string;
+  dutyUnits: MyDutyUnit[];
+}
 
 export async function fetchSharePage(shareId: string): Promise<FetcherResult> {
   const url = `${MYDUTY_BASE_URL}/s/${shareId}`;
@@ -18,36 +22,32 @@ export async function fetchSharePage(shareId: string): Promise<FetcherResult> {
   }
 
   const html = await response.text();
+  const boot = extractBootstrap(html);
 
-  const userId = extractUserId(html);
-  const dutyUnits = extractDutyUnits(html);
-  const userName = extractUserName(html);
-
-  return { userId, userName, dutyUnits };
+  return {
+    userId: boot.userId,
+    userName: boot.userName || "Unknown",
+    dutyUnits: boot.dutyUnits,
+  };
 }
 
-function extractUserId(html: string): string {
-  const match = html.match(USER_ID_PATTERN);
-  if (!match) {
-    throw new Error("userId를 추출할 수 없습니다");
-  }
-  return match[1];
-}
-
-function extractDutyUnits(html: string): MyDutyUnit[] {
+function extractBootstrap(html: string): BootstrapPayload {
   const $ = cheerio.load(html);
-  const jsonText = $("#json_dutyUnits").text().trim();
+  const jsonText = $("#__myduty_bootstrap__").text().trim();
 
   if (!jsonText) {
-    throw new Error("듀티 타입 정보를 찾을 수 없습니다");
+    throw new Error("마이듀티 부트스트랩 데이터를 찾을 수 없습니다");
   }
 
-  const units: MyDutyUnit[] = JSON.parse(jsonText);
-  return units;
-}
+  const data = JSON.parse(jsonText) as Partial<BootstrapPayload>;
 
-function extractUserName(html: string): string {
-  const $ = cheerio.load(html);
-  const name = $(".task-thumb-details h1").text().trim();
-  return name || "Unknown";
+  if (!data.userId || !Array.isArray(data.dutyUnits)) {
+    throw new Error("부트스트랩 데이터 형식이 예상과 다릅니다");
+  }
+
+  return {
+    userId: String(data.userId),
+    userName: data.userName ?? "",
+    dutyUnits: data.dutyUnits,
+  };
 }
